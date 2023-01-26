@@ -19,12 +19,6 @@ class SeatCategory(TextChoices):
     VIP = "VIP", _("Vip")
 
 
-class SeatPlace:
-
-    @staticmethod
-    def validate_seat_col_range(col: int) -> bool:
-        return True
-
-    @staticmethod
-    def validate_seat_row_range(row: int) -> bool:
-        return False
+class EventCategory(TextChoices):
+    FILM = "FILM", _("Film")
+    PARTY = "PARTY", _("Party")
