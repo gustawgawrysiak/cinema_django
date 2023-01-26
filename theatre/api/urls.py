@@ -23,4 +23,9 @@ theatre_router.register(
     viewset=views.SeatViewSet,
     basename='theatre'
 )
+theatre_router.register(
+    prefix=r'event',
+    viewset=views.EventViewSet,
+    basename='theatre'
+)
 urlpatterns = [] + theatre_router.urls
