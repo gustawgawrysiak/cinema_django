@@ -19,5 +19,5 @@ import theatre.api.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('theatre/', include((theatre.api.urls)))
+    path('api/v1/theatre/', include((theatre.api.urls)))
 ]
