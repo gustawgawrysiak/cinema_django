@@ -14,6 +14,7 @@ from ..serializers import AddHallSerializer, HallSerializer
 class HallViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   GenericViewSet):
     permission_classes = [IsAuthenticated, ]
     filter_backends = [SearchFilter, ]
@@ -25,7 +26,8 @@ class HallViewSet(mixins.CreateModelMixin,
         return {
             'list': HallSerializer,
             'create': AddHallSerializer,
-            'retrieve': HallSerializer
+            'retrieve': HallSerializer,
+            'partial_update': HallSerializer
         }[self.action]
 
     def get_queryset(self) -> QuerySet:
@@ -54,3 +56,6 @@ class HallViewSet(mixins.CreateModelMixin,
     def perform_create(self, serializer) -> Hall:
         hall: Hall = serializer.save()
         return hall
+
+    def partial_update(self, request: Request, *args: Any, **kwargs: Any):
+        super().partial_update(request=request, *args, **kwargs)

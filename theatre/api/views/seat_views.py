@@ -14,6 +14,7 @@ from ..serializers import AddSeatSerializer, SeatSerializer
 class SeatViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   GenericViewSet):
     permission_classes = [IsAuthenticated, ]
     filter_backends = [SearchFilter, ]
@@ -25,7 +26,8 @@ class SeatViewSet(mixins.CreateModelMixin,
         return {
             'list': SeatSerializer,
             'create': AddSeatSerializer,
-            'retrieve': SeatSerializer
+            'retrieve': SeatSerializer,
+            'partial_update': SeatSerializer
         }[self.action]
 
     def get_queryset(self) -> QuerySet:
@@ -54,3 +56,6 @@ class SeatViewSet(mixins.CreateModelMixin,
     def perform_create(self, serializer) -> Seat:
         hall: Seat = serializer.save()
         return hall
+
+    def partial_update(self, request: Request, *args: Any, **kwargs: Any):
+        super().partial_update(request=request, *args, **kwargs)

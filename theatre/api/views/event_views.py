@@ -14,6 +14,7 @@ from ..serializers import AddEventSerializer, EventSerializer
 class EventViewSet(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
                    GenericViewSet):
     permission_classes = [IsAuthenticated, ]
     filter_backends = [SearchFilter, ]
@@ -25,7 +26,8 @@ class EventViewSet(mixins.CreateModelMixin,
         return {
             'list': EventSerializer,
             'create': AddEventSerializer,
-            'retrieve': EventSerializer
+            'retrieve': EventSerializer,
+            'partial_update': EventSerializer
         }[self.action]
 
     def get_queryset(self) -> QuerySet:
@@ -48,3 +50,6 @@ class EventViewSet(mixins.CreateModelMixin,
     def perform_create(self, serializer) -> Film:
         film: Film = serializer.save()
         return film
+
+    def partial_update(self, request: Request, *args: Any, **kwargs: Any):
+        super().partial_update(request=request, *args, **kwargs)
