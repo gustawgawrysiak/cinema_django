@@ -2,8 +2,7 @@ from typing import Dict
 
 from rest_framework import serializers
 from tickets.models import Ticket
-from theatre.models import Film
-
+from theatre.models import Film, Event, Seat
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -13,15 +12,17 @@ class TicketSerializer(serializers.ModelSerializer):
 
 
 class AddTicketSerializer(serializers.Serializer):
-    title = serializers.CharField(required=True)
+    event_id = serializers.SlugRelatedField(slug_field='id',
+                                            queryset=Event.objects.all())
     description = serializers.CharField(required=False)
-    length = serializers.CharField(required=True)
+    seat_id = serializers.SlugRelatedField(slug_field='id',
+                                           queryset=Seat.objects.all())
 
     def create(self, validated_data: Dict) -> Ticket:
         ticket = Ticket(
-            title = ticket.validate_title(validated_data["title"]),
+            event_id=validated_data["event_id"],
             description=validated_data["description"],
-            length=validated_data["length"]
+            seat_id=validated_data["seat_id"]
         )
         ticket.save()
         return ticket
