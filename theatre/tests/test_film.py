@@ -10,15 +10,18 @@ class FilmTestCase(TestCase):
     def setUp(cls) -> None:
         pass
 
-    def test_create_film(self):
-        add_film_serializer = AddFilmSerializer()
+    def test_create_film_from_serializer(self):
         film_dict = {
             "title": 'SpiderMan',
             "description": 'film o spider manie',
             "length": 150,
             "category": 'ACTION'
         }
-        film1 = add_film_serializer.create(film_dict)
+        add_film_serializer = AddFilmSerializer(data=film_dict)
+        add_film_serializer.is_valid()
+        add_film_serializer.save()
+        film1 = Film.objects.first()
+
         self.assertEqual(film1.title, 'SpiderMan')
         self.assertEqual(film1.description, 'film o spider manie')
         self.assertEqual(film1.length, 150)
@@ -28,6 +31,7 @@ class FilmTestCase(TestCase):
         self.assertNotEqual(film1.length, 120)
         self.assertNotEqual(film1.category, 'KIDS')
 
+    def test_create_film(self):
         film2 = Film.objects.create(title="SpiderMan2",
                                     description="drugi film o spider manie",
                                     length=120,
@@ -40,5 +44,3 @@ class FilmTestCase(TestCase):
         self.assertNotEqual(film2.description, 'film o spider manie')
         self.assertNotEqual(film2.length, 150)
         self.assertNotEqual(film2.category, FilmCategory.CRIME)
-
-        self.assertEqual(Film.objects.count(), 2)
